@@ -24,6 +24,7 @@ func calculate(input string) int {
 	var result int
 	result = 0
 	for _, element := range elements {
+		element = strings.TrimSpace(element)
 		num,_ := strconv.ParseInt(element,10,64)
 		index = int8(strings.Index(input, element))
 		if index > 0 {
