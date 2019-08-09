@@ -1,24 +1,23 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
 
-func main() {
-	var input string
-	_, _ = fmt.Scanln(&input)
+//func main() {
+//	var input string
+//	_, _ = fmt.Scanln(&input)
 	//var result int
-	fmt.Println(calculate(input))
-}
+	//fmt.Println(calculate(input))
+//}
 func splitter(input string) []string {
 	return strings.FieldsFunc(input, Split)
 }
 func Split(r rune) bool {
 	return r == '+' || r == '-'
 }
-func calculate(input string) int {
+func Calculate(input string) int {
 	elements := splitter(input)
 	var index int8
 	var result int

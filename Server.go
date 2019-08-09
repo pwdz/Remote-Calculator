@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strconv"
 	"strings"
-	""
 )
 const(
 	PORT = "1540"
@@ -32,20 +32,45 @@ func main()  {
 	}
 }
 func handleRequest(conn net.Conn)  {
-	//buf := make([]byte, 1024)
 	// Read the incoming connection into the buffer.
-	//req, err := conn.Read(buf)
 	for {
 		netData, err := bufio.NewReader(conn).ReadString('\n')
 		fmt.Println("you sent this:"+netData)
 		if err != nil {
 			fmt.Println("Error reading:", err.Error())
 		}
-		if strings.Compare(string(netData), "finish") == 0 {
+		if strings.Compare(string(netData), "finish\n") == 0 {
+			fmt.Println("byeeeeeeeeeeee")
 			break
 		}
-		fmt.Println("calculating...")
-		_, _ = conn.Write([]byte(string(main.calculate(netData))))
+		_, _ = conn.Write([]byte(strconv.Itoa(Calculate1(string(netData)))+"\n"))
 	}
 	_ = conn.Close()
+}
+func splitter1(input string) []string {
+	return strings.FieldsFunc(input, Split1)
+}
+func Split1(r rune) bool {
+	return r == '+' || r == '-'
+}
+func Calculate1(input string) int {
+	elements := splitter1(input)
+	var index int8
+	var result int
+	result = 0
+	for _, element := range elements {
+		element = strings.TrimSpace(element)
+		num,_ := strconv.ParseInt(element,10,64)
+		index = int8(strings.Index(input, element))
+		if index > 0 {
+			switch input[index-1] {
+			case '-':
+				num *=-1
+			case '+':
+				//nothing :)
+			}
+		}
+		result+=int(num)
+	}
+	return result
 }
